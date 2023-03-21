@@ -1,0 +1,73 @@
+File communication (Express)
+    Client asks server for a file (ex: playerimg.png)
+
+        mywebsite.com   :2000   /client/playerImg.png
+URL =   DOMAIN          PORT       PATH
+    ex: laptop          usbport     query
+
+Package communication (Socket.io)
+    Client sends data to server (Ex: INput)
+    Seve sends data to cliente (Ex:monster position)
+
+Socket.io
+
+    Listening
+    Emetting
+
+
+    console.log('socket connection');
+    socket.on('happy',function(data){
+        console.log('happy because ' + data.reason);
+    })
+    socket.emit('serverMsg',{
+        msg:'Hello',
+    })*/
+
+    /*var happy =function(){
+    socket.emit('happy',{reason:'its my birthday'});
+}
+    happy();
+
+Beware: you should never trust input from a user. 
+Currently the app is exposed to XSS based attack (hacker can steal other users data, cookies, etc, and mess up the whole game, using html tags injection and JS injections into the chat.)
+You should always sanitize input from a user:   use; npm install sanitizer  (this is just an example that I use.)
+while on server-side app.js use:  sanitizer.escape(Data);
+
+Always keep that in mind, never trust input from a user. 
+
+<canvas id="ctx" width="500" height="500" style="border: 1px solid #0000;"></canvas>
+
+MongoDB 101
+    mongod.exe: start database
+    mongo.exe: client to send queries
+
+database
+    collection0 -> table
+        document0 -> queries
+mygame
+    account
+        {username:"bob",password:"pass"}
+    progress
+        {username:"bob",level:123}
+
+create database:
+    use <DATABASE_NAME>
+create.collection
+    db.createCollection("account");
+add document
+    db.account.insert({username:"bob"});
+
+read document
+    db.account.find({username:"bob"});
+
+    db.progress.find({username:"bob"},{level:1});
+
+update
+    db.progress.update({username:"bob"},{$set:{level:99}});
+
+    DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+
+An app should use a single MongoClient instances for all database requests
+Creating a new MongoClient for each request will affect the application's perfomance.
+
+Only can default export 1 thing
