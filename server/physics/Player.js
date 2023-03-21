@@ -45,6 +45,7 @@ export default class Player extends Entity{
 Player.list = {};
 Player.onConnect = function(socket){
     let player = new Player(socket.id);
+    console.log("Connected/created Player");
     //Creates a listener at any keyPress package
     socket.on('keyPress',function(data){
         if(data.inputId=='left'){player.pressingLeft = data.state;}
@@ -56,6 +57,7 @@ Player.onConnect = function(socket){
     });
 }
 Player.onDisconnect = function(socket){
+    console.log("Removed from Player.list")
     delete Player.list[socket.id];
 }
 
