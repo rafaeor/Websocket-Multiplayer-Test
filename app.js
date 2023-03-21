@@ -20,16 +20,30 @@ app.get("/", function(req, res) {
 
 app.use("/client", express.static(__dirname + "/client"));
 
-
-
 server.listen(2000);
 
-console.log("Server started.");
+console.log("Server started http://localhost:2000");
 
 
+import mainGameLoop from './server/mainGameLoop.js';
 
-const SOCKET_LIST = {};
-/*static onConnect(socket) {
+export const SOCKET_LIST = {};
+
+socketio.sockets.on('connection',(socket) => {
+    console.log("client connected");
+    /*socket.on('signIn',() = > {});
+    socket.on('signUp',() = > {});
+    socket.on('evalServer',() = > {});
+    socket.on('sendMessageToServer',() = > {});
+    socket.on('keyPress',() = > {});*/
+    socket.on('disconnect', () => {
+        console.log("client disconnected");
+        delete SOCKET_LIST[socket.id];
+    })
+})
+
+/*
+static onConnect(socket) {
 
     let player = new Player(socket.id);
 
@@ -47,29 +61,10 @@ const SOCKET_LIST = {};
 
   }
 
-
-
   static onDisconnect(socket) {
 
     delete Player.list[socket.id];
 
   }
 
-
-  setInterval(function() {
-
-    let pack = {
-  
-      player: Player.update()
-  
-    };
-  
-    for (let i in SOCKET_LIST) {
-  
-      let socket = SOCKET_LIST[i];
-  
-      socket.emit("newPosition", pack);
-  
-    }
-  
-  }, 1000 / 25);*/
+  */
