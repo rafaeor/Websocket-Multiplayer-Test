@@ -27,6 +27,7 @@ console.log("Server started http://localhost:2000");
 
 import mainGameLoop from './server/mainGameLoop.js';
 import Player from './server/physics/Player.js';
+import messageListener from './server/networking/chat.js';
 
 export const SOCKET_LIST = {};
 
@@ -37,9 +38,8 @@ socketio.sockets.on('connection',(socket) => {
     //let Playervar = new Player(socket.id);
     /*socket.on('signIn',() = > {});
     socket.on('signUp',() = > {});
-    socket.on('evalServer',() = > {});
-    socket.on('sendMessageToServer',() = > {});
     socket.on('keyPress',() = > {});*/
+    messageListener(socket);//all chat operations
     socket.on('disconnect', () => {
         console.log("client disconnected");
         delete SOCKET_LIST[socket.id];
