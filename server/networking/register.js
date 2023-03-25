@@ -9,10 +9,10 @@ export let isValidPassword = function(data){
     //database.find("mygame","progress",{username:"bob"}).catch(console.dir);
     let expected = database.find("mygame","account",{username,password});
     if(expected.username==data.username&&expected.password==data.password){
-        return 0
+        return true
     }
     else{
-        return 1
+        return false
     }
 }
 
@@ -21,10 +21,10 @@ export let isUsernameTaken = function(data,cb){
     //database.find("mygame","progress",{username:"bob"}).catch(console.dir);
     let expected = database.find("mygame","account",{username,password});
     if(expected.username==data.username){
-        return 0
+        return true
     }
     else{
-        return 1
+        return false
     }
 }
 export let addUser = function(data){

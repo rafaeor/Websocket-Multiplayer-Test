@@ -25,8 +25,8 @@ export async function find(databasename,collectionname,queryname) {
     //console.log("Connection with database closed")
   }
 }
-let bob = {username:"bob"}
-find("mygame","progress",bob);
+/*let bob = {username:"bob"}
+find("mygame","progress",bob);*/
 //
 
 export async function insert(databasename,collectionname,queryname) {
