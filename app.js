@@ -36,10 +36,17 @@ export const SOCKET_LIST = {};
 socketio.sockets.on('connection',(socket) => {
     console.log("client connected");
     SOCKET_LIST[socket.id] = socket;
+
+    /*database.find("mygame","account",{username:'bob'}).then((accounts)=>{
+      console.log(accounts);
+    })*/
+
     socket.on('signIn',(data) => {
       //let databaseSearch = database.find("mygame","accouht",data);
       //if(databaseSearch.username==data.username,databaseSearch.password==data.password){ //if valid password and username
-      if(register.isValidPassword(data)){
+      let singdata = register.isValidPassword(data)
+      if(singdata){
+        console.log("player is connected");
         Player.onConnect(socket);
         socket.emit('signInResponse',{success:true});
       }
@@ -55,7 +62,9 @@ socketio.sockets.on('connection',(socket) => {
         socket.emit('signUpResponse',{success:true});
       };
     });
+
     chatmessageListener(socket);//all chat operations
+
     socket.on('disconnect', () => {
         console.log("client disconnected");
         delete SOCKET_LIST[socket.id];

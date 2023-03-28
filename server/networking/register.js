@@ -3,23 +3,40 @@ import * as database from '../networking/database.js';
 export let USERS = {
 };
 
-export let isValidPassword = function(data){
-    let username = data.username;
+export async function isValidPassword(data){
+    let username = data.username;//username: data.username
     let password = data.password;
-    //database.find("mygame","progress",{username:"bob"}).catch(console.dir);
-    let expected = database.find("mygame","account",{username,password});
+
+    database.find("mygame","account",{username,password}).then((res)=>{
+        console.log(res);
+        let expected = res;
+        if(expected){
+            if(expected.username==data.username&&expected.password==data.password){
+                console.log("returned true");
+                return true;
+            }
+            else{
+                console.log("returned false");
+                return false;
+            }
+        }
+        else{
+            console.log("returned false");
+            return false;
+        }
+    })
+    /*let expected = database.find("mygame","account",{username,password});
     if(expected.username==data.username&&expected.password==data.password){
         return true
     }
     else{
         return false
-    }
+    }*/
 }
 
-export let isUsernameTaken = function(data,cb){
+export let isUsernameTaken = function(data){
     let username = data.username;
-    //database.find("mygame","progress",{username:"bob"}).catch(console.dir);
-    let expected = database.find("mygame","account",{username,password});
+    let expected = database.find("mygame","account",{username});
     if(expected.username==data.username){
         return true
     }
@@ -30,7 +47,7 @@ export let isUsernameTaken = function(data,cb){
 export let addUser = function(data){
     let username = data.username;
     let password = data.password;
-    database.account.insert("mygame","account",{username,password});
+    let expected = database.account.insert("mygame","account",{username,password});
 }
 
 export default {addUser,isUsernameTaken,isValidPassword}

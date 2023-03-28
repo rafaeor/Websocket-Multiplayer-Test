@@ -20,9 +20,11 @@ export async function find(databasename,collectionname,queryname) {
     return queryjson;
 // If you don't want to return the _id in your find() command you can do db.progress.find({"username":"bob"},{"level":1,"_id":0}) 
   } finally {
+
     // Ensures that the client will close when you finish/error
     //await client.close();
     //console.log("Connection with database closed")
+    
   }
 }
 /*let bob = {username:"bob"}
