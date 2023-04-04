@@ -28,8 +28,8 @@ console.log("Server started http://localhost:2000");
 import mainGameLoop from './server/mainGameLoop.js';
 import Player from './server/physics/Player.js';
 import chatmessageListener from './server/networking/chat.js';
-import database from './server/networking/database.js';
-import register, { addUser, isUsernameTaken, isValidPassword } from './server/networking/register.js';
+//import database from './server/networking/database.js';
+//import register, { addUser, isUsernameTaken, isValidPassword } from './server/networking/register.js';
 
 export const SOCKET_LIST = {};
 
@@ -37,13 +37,8 @@ socketio.sockets.on('connection',(socket) => {
     console.log("client connected");
     SOCKET_LIST[socket.id] = socket;
 
-    /*database.find("mygame","account",{username:'bob'}).then((accounts)=>{
-      console.log(accounts);
-    })*/
 
-    socket.on('signIn',(data) => {
-      //let databaseSearch = database.find("mygame","accouht",data);
-      //if(databaseSearch.username==data.username,databaseSearch.password==data.password){ //if valid password and username
+/*    socket.on('signIn',(data) => {
       let singdata = register.isValidPassword(data)
       if(singdata){
         console.log("player is connected");
@@ -61,6 +56,11 @@ socketio.sockets.on('connection',(socket) => {
         register.addUser(data);
         socket.emit('signUpResponse',{success:true});
       };
+    });
+*/
+    socket.on('signIn',(data) => {
+      Player.onConnect(socket);//Enquanto não termino o sistema de login
+      socket.emit('signInResponse',{success:true});
     });
 
     chatmessageListener(socket);//all chat operations

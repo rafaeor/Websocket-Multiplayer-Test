@@ -48,31 +48,96 @@
         if(data.success){alert("Sign up successul")
         } else {alert("Sign up unsuccessul")};
     });
-
+    // chat
     let chatText = document.getElementById('chat-text');
     let chatInput = document.getElementById('chat-input');
     let chatForm = document.getElementById('chat-form');
+
+    //game
     let ctx = document.getElementById("ctx").getContext("2d");
     ctx.font = '30px Arial';
 
     //import Init from './scripts/Init.js';
     // init
+    var Player = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.number = initPack.number;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		Player.list[self.id] = self;
+		return self;
+	}
+	Player.list = {};
+ 
+ 
+	var Bullet = function(initPack){
+		var self = {};
+		self.id = initPack.id;
+		self.x = initPack.x;
+		self.y = initPack.y;
+		Bullet.list[self.id] = self;		
+		return self;
+	}
+	Bullet.list = {};
+ 
+ 
+	socket.on('initPack',function(data){	
+		//{ player : [{id:123,number:'1',x:0,y:0},{id:1,number:'2',x:0,y:0}], bullet: []}
+		for(var i = 0 ; i < data.player.length; i++){
+			new Player(data.player[i]);
+		}
+		for(var i = 0 ; i < data.bullet.length; i++){
+			new Bullet(data.bullet[i]);
+		}
+	});
         //when new stuff created, contains all the data
     // update
         //difference
+        socket.on('update',function(data){
+		//{ player : [{id:123,x:0,y:0},{id:1,x:0,y:0}], bullet: []}
+		for(var i = 0 ; i < data.player.length; i++){
+			var pack = data.player[i];
+			var p = Player.list[pack.id];
+			if(p){
+				if(pack.x !== undefined)
+					p.x = pack.x;
+				if(pack.y !== undefined)
+					p.y = pack.y;
+			}
+		}
+		for(var i = 0 ; i < data.bullet.length; i++){
+			var pack = data.bullet[i];
+			var b = Bullet.list[data.bullet[i].id];
+			if(b){
+				if(pack.x !== undefined)
+					b.x = pack.x;
+				if(pack.y !== undefined)
+					b.y = pack.y;
+			}
+		}
+	});
     // remove
         //when player get removed
-    //Sockets
-    socket.on('newPosition',function(data){
-        ctx.clearRect(0,0,500,500);
+        socket.on('removePack',function(data){
         for(let i = 0; i<data.player.length; i++){
-            ctx.fillText(data.player[i].number,data.player[i].x,data.player[i].y); // letters
+            delete Player.list[data.player[i]];
         };
         for(let i = 0; i<data.bullet.length; i++){
-            ctx.fillRect(data.bullet[i].x-5,data.bullet[i].y-5,10,10);//rect
-            //top left -5 and bottom right -5 for the rect being at center.
+            delete Bullet.list[data.bullet[i]];
         };
     });
+
+    setInterval(function(){
+        ctx.clearRect(0,0,500,500);
+        for(let i in Player.list){
+            ctx.fillText(Player.list[i].number,Player.list[i].x,Player.list[i].y); // letters
+        };
+        for(let i in Bullet.list){
+            ctx.fillRect(Bullet.list[i].x-5,Bullet.list[i].y-5,10,10);//rect
+            //top left -5 and bottom right -5 for the rect being at center.
+        };
+    },40);//24 fps
 
     socket.on('addToChat', function(data){
         chatText.innerHTML += '<div>' + data+ '</div>';

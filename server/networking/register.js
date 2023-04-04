@@ -25,13 +25,6 @@ export async function isValidPassword(data){
             return false;
         }
     })
-    /*let expected = database.find("mygame","account",{username,password});
-    if(expected.username==data.username&&expected.password==data.password){
-        return true
-    }
-    else{
-        return false
-    }*/
 }
 
 export let isUsernameTaken = function(data){
@@ -47,7 +40,7 @@ export let isUsernameTaken = function(data){
 export let addUser = function(data){
     let username = data.username;
     let password = data.password;
-    let expected = database.account.insert("mygame","account",{username,password});
+    database.insert("mygame","account",{username,password});
 }
 
 export default {addUser,isUsernameTaken,isValidPassword}

@@ -1,6 +1,6 @@
 import Entity from "./Entity.js";
 import Player from "./Player.js";
-
+import { initPack,removePack } from "../mainGameLoop.js";
 export default class Bullet extends Entity{
     static list = {};
     constructor(parent,angle){
@@ -13,6 +13,7 @@ export default class Bullet extends Entity{
         this.timer = 0;
         this.toRemove = false;
         Bullet.list[this.id] = this;
+        initPack.bullet.push({id:this.id,x:this.x,y:this.y});
 };
     update(){
         super.update();
@@ -35,8 +36,10 @@ export let bullet_update = Bullet.update = function() {
         bullet.update();
         if (bullet.toRemove){
             delete Bullet.list[i];
+            removePack.bullet.push({id:bullet.id})
         }
         else pack.push({
+            id:bullet.id,
             x:bullet.x,
             y:bullet.y,
         });

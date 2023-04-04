@@ -1,6 +1,6 @@
 import Entity from "./Entity.js";
 import Bullet from "./Projectile.js";
-
+import { initPack,removePack } from "../mainGameLoop.js";
 export default class Player extends Entity{
     static list = {};
     constructor(id){
@@ -25,6 +25,12 @@ export default class Player extends Entity{
         }
     };
     Player.list[id] = this;
+	initPack.player.push({
+		id:this.id,
+		x:this.x,
+		y:this.y,	
+		number:this.number,	
+	});
     };
     shootBullet(angle){
         var b = new Bullet(this.id,angle);
@@ -57,8 +63,11 @@ Player.onConnect = function(socket){
     });
 }
 Player.onDisconnect = function(socket){
-    console.log("Removed from Player.list")
-    delete Player.list[socket.id];
+    if(Player.list[socket.id]){
+        console.log("Removed from Player.list");
+        delete Player.list[socket.id];
+        removePack.player.push({id:socket.id});
+    }
 }
 
 Player.update = function() {
@@ -67,9 +76,9 @@ Player.update = function() {
         let player = Player.list[i];
         player.update();
         pack.push({
+            id:player.id,
             x:player.x,
             y:player.y,
-            number:player.number
         })
         // pack.push should be a diferent function
     }
