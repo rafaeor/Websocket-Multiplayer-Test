@@ -1,6 +1,7 @@
 import Entity from "./Entity.js";
 import Bullet from "./Projectile.js";
 import { initPack,removePack } from "../mainGameLoop.js";
+import {getInitPack, getUpdatePack} from "../networking/helpers/packages.js";
 export default class Player extends Entity{
     static list = {};
     constructor(id){
@@ -25,12 +26,7 @@ export default class Player extends Entity{
         }
     };
     Player.list[id] = this;
-	initPack.player.push({
-		id:this.id,
-		x:this.x,
-		y:this.y,	
-		number:this.number,	
-	});
+	initPack.player.push(getInitPack(this));
     };
     shootBullet(angle){
         var b = new Bullet(this.id,angle);
@@ -61,6 +57,12 @@ Player.onConnect = function(socket){
         else if(data.inputId=='attack'){player.pressingAttack = data.state;}
         else if(data.inputId=='mouseAngle'){player.mouseAngle = data.state;}
     });
+    let players = [];
+    for(let i in Player.list){players.push(getInitPack(Player.list[i]));}
+    socket.emit('initPack',{
+        player:players,
+        bullet:[],
+    });
 }
 Player.onDisconnect = function(socket){
     if(Player.list[socket.id]){
@@ -75,11 +77,12 @@ Player.update = function() {
     for(var i in Player.list){
         let player = Player.list[i];
         player.update();
-        pack.push({
+        /*pack.push({
             id:player.id,
             x:player.x,
             y:player.y,
-        })
+        })*/
+        pack.push(getUpdatePack(player));
         // pack.push should be a diferent function
     }
     return pack;

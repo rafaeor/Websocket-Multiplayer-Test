@@ -69,7 +69,9 @@
 		return self;
 	}
 	Player.list = {};
- 
+    Player.onDisconnect = function(PlayerX){
+        Player.list[PlayerX.id] = 0;
+    }
  
 	var Bullet = function(initPack){
 		var self = {};
@@ -120,12 +122,15 @@
     // remove
         //when player get removed
         socket.on('removePack',function(data){
-        for(let i = 0; i<data.player.length; i++){
-            delete Player.list[data.player[i]];
-        };
-        for(let i = 0; i<data.bullet.length; i++){
-            delete Bullet.list[data.bullet[i]];
-        };
+            for(let i = 0; i<data.player.length; i++){
+                console.log(data.player[i].id);
+                let x = data.player[i].id;
+                delete Player.list[x];
+            };
+            for(let i = 0; i<data.bullet.length; i++){
+                let x = data.bullet[i].id;
+                delete Bullet.list[x];
+            };
     });
 
     setInterval(function(){
