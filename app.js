@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.get("/", function(req, res) {
+app.get("/", (req, res) =>{
 
   res.sendFile(__dirname + "/client/index.html");
 
