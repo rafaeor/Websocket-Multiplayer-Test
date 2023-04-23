@@ -71,3 +71,58 @@ An app should use a single MongoClient instances for all database requests
 Creating a new MongoClient for each request will affect the application's perfomance.
 
 Only can default export 1 thing
+
+Heroku for server, Compose.io for database, Namecheap for domain, Mailgun for Email, Google Drive for storage.
+
+What I'm doing in Raining Chain is that every server contains the full game. Each server can manage about 50 players at once. 
+Players can choose which server they want to connect to. It's the same system than what Runescape uses. 
+
+
+v8-profiller node -> server profile
+
+If player changes the window while pressing w/a/s/d the server keeps changing the value of position because the client didn't use keyup. To fix it i used setTimeout for 500ms. If the client don't send information in 500ms to server, server thinks the player isn't pressing the key so turns it into "false".
+
+const clearPosition = () => {
+
+    player.pressingLeft = false;
+
+    player.pressingDown = false;
+
+    player.pressingUp = false;
+
+    player.pressingRight = false;
+
+  };
+  
+  let out;
+
+  socket.on("keyPress", data => {
+
+    clearTimeout(out);
+
+    if (data.inputId == "left") player.pressingLeft = data.state;
+
+    if (data.inputId == "right") player.pressingRight = data.state;
+
+    if (data.inputId == "down") player.pressingDown = data.state;
+
+    if (data.inputId == "up") player.pressingUp = data.state;
+
+    out = setTimeout(clearPosition, 500);
+
+  });
+
+
+HTML5 User Interface:
+
+    Canvas-based (easiest, but no interaction)
+        ctx.fillText('Hey',1,1);
+        ctx.drawImage
+    
+    Javascript-base (visually hard, hard to maintain code)
+        (can update html)
+        var div = document.createElement('div');
+        div.innerHTML = 'hi';
+    
+    HTML-based (recommended and easy, hard to make reusable content)
+        <div style = "margin-left:10px">Hello

@@ -1,9 +1,13 @@
 export default class Entity{
-    x = 250;
-    y = 250;
-    spdX = 0;
-    spdY = 0;
-    id = "";
+    constructor(/*id,x,y,map*/){
+        this.x = 250;
+        this.y = 250;
+        this.spdX = 0;
+        this.spdY = 0;
+        this.id = "";
+        this.map='forest';
+    }
+    
     
     update(){
         this.updatePosition();

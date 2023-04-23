@@ -20,14 +20,13 @@ app.get("/", function(req, res) {
 
 app.use("/client", express.static(__dirname + "/client"));
 
-server.listen(2000);
+server.listen(process.env.PORT || 2000);
 
 console.log("Server started http://localhost:2000");
 
 
 import mainGameLoop from './server/mainGameLoop.js';
 import Player from './server/physics/Player.js';
-import chatmessageListener from './server/networking/chat.js';
 //import database from './server/networking/database.js';
 //import register, { addUser, isUsernameTaken, isValidPassword } from './server/networking/register.js';
 
@@ -59,11 +58,10 @@ socketio.sockets.on('connection',(socket) => {
     });
 */
     socket.on('signIn',(data) => {
-      Player.onConnect(socket);//Enquanto não termino o sistema de login
+      Player.onConnect(socket,data.username);//Enquanto não termino o sistema de login
+      console.log("the data username is : " + data.username)
       socket.emit('signInResponse',{success:true});
     });
-
-    chatmessageListener(socket);//all chat operations
 
     socket.on('disconnect', () => {
         console.log("client disconnected");
