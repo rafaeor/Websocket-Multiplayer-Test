@@ -9,8 +9,8 @@
 </div>
 <div id = "gameDiv" style="display: none;">
     <div id="game" style="position: absolute;width: 500px;height: 500px;">
-        <canvas id = "ctx" width="500" height="500" style="position: absolute;border: 1px solid #000000;"></canvas>
-        <canvas id = "ctx-ui" width="500" height="500" style="position: absolute;border: 1px solid #000000;"></canvas>
+        <canvas id = "ctx" width="500" height="500" style="position: absolute;"></canvas>
+        <canvas id = "ctx-ui" width="500" height="500" style="position: absolute;"></canvas>
         
         <div id="ui" style="position: absolute;width: 500px;height: 500px;">
             <button onclick="changeMap()" style="position: absolute;bottom: 0px; left: 0px;">
@@ -34,8 +34,8 @@
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script><!-- Uses your internet bandwidth -->
 <script src="/client/scripts/ClientPlayer.js"></script>
 <script>
-    const WIDTH = 500;
-    const HEIGHT = 500;
+    const WIDTH = innerWidth;
+    const HEIGHT = innerHeight;
 
     let socket = io();
 
@@ -46,6 +46,14 @@
     let signDiv = document.getElementById('signDiv');
     let signDivUsername = document.getElementById('signDiv-username');
     let signDivSignIn = document.getElementById('signDiv-signIn');
+    const canvas = document.querySelector('canvas');
+    canvas.width = innerWidth-25;  
+    let ctxid = document.getElementById('ctx');
+    ctxid.width =innerWidth-25;
+    ctxid.height = innerHeight-25;
+    let ctxuiid = document.getElementById('ctx');
+    ctxuiid.width =innerWidth-25;
+    ctxuiid.height = innerHeight-25;
     //let signDivSignUp = document.getElementById("signDiv-signUp");
     //let signPassword = document.getElementById("signDiv-password");
 
@@ -77,7 +85,6 @@
             signDiv.style.display = 'none';
             global.style.display = 'none';
             gameDiv.style.display = 'inline-block'
-            console.log("Sign in unsuccessul")
         } else {alert("Sign in unsuccessul")};
     });
     socket.on('signUpResponse', function(data){
@@ -102,9 +109,9 @@
     Img.bullet.src = '/client/img/bullet.png';
     Img.map = {};
     Img.map['field'] = new Image();
-    Img.map['field'].src = '/client/img/map.png';
+    Img.map['field'].src = '/client/img/PlayStation - Tales of Eternia Tales of Destiny II - Glimmer Spire Valkyries Room.png';
     Img.map['forest'] = new Image();
-    Img.map['forest'].src = '/client/img/bat.png';
+    Img.map['forest'].src = '/client/img/PlayStation - Tales of Eternia Tales of Destiny II - Shizel Castle Time and Space.png';
 
     let ctx = document.getElementById("ctx").getContext("2d");
     let ctxUi = document.getElementById("ctx-ui").getContext("2d");
@@ -246,7 +253,7 @@
 
     setInterval(function(){
         if(!selfId){return;}
-        ctx.clearRect(0,0,500,500);
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
         drawMap();
         drawScore();
         for(let i in Player.list){Player.list[i].draw();};
@@ -268,7 +275,7 @@
         if(lastScore===Player.list[selfId].score){return;}
         lastScore = Player.list[selfId].score;
         ctxUi.fillStyle = 'white';
-        ctxUi.clearRect(0,0,500,500);
+        ctxUi.clearRect(0,0,WIDTH,HEIGHT);
         ctxUi.fillText(Player.list[selfId].score,0,30);
     }
     var lastScore = null;

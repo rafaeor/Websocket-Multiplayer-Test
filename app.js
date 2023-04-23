@@ -33,7 +33,7 @@ import Player from './server/physics/Player.js';
 export const SOCKET_LIST = {};
 
 socketio.sockets.on('connection',(socket) => {
-    console.log("client connected");
+    //console.log("client connected");
     SOCKET_LIST[socket.id] = socket;
 
 
@@ -59,12 +59,12 @@ socketio.sockets.on('connection',(socket) => {
 */
     socket.on('signIn',(data) => {
       Player.onConnect(socket,data.username);//Enquanto não termino o sistema de login
-      console.log("the data username is : " + data.username)
+      console.log("The user: " + data.username+ " has connected")
       socket.emit('signInResponse',{success:true});
     });
 
     socket.on('disconnect', () => {
-        console.log("client disconnected");
+        //console.log("client disconnected");
         delete SOCKET_LIST[socket.id];
         Player.onDisconnect(socket);
     })
