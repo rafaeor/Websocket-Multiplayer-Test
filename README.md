@@ -9,7 +9,7 @@ Websocket-Multiplayer-Test is an online game test built using Socket.io in JavaS
 ## How to Use
 
 1. Run `git clone https://github.com/rafaeor/Websocket-Multiplayer.git` in the terminal.
-2. Run `cd Websocket-Multiplayer>`
+2. Run `cd Websocket-Multiplayer`
 3. Run `npm install` to install the necessary dependencies.
 4. Start the server by running `npm start`.
 5. Open `http://localhost:2000` on your browser.
